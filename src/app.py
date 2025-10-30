@@ -28,10 +28,18 @@ model, feature_names = load_model_and_features()
 
 # โหลดรูปภาพ
 try:
-    feature_importance_img = Image.open('feature_importance.png')
-    roc_curve_img = Image.open('roc_curve.png')
+    script_dir = os.path.dirname(__file__) # หา path อีกครั้ง (เผื่อไว้)
+    feature_importance_path = os.path.join(script_dir, 'feature_importance.png')
+    roc_curve_path = os.path.join(script_dir, 'roc_curve.png')
+    
+    feature_importance_img = Image.open(feature_importance_path) # ใช้ path เต็ม
+    roc_curve_img = Image.open(roc_curve_path) # ใช้ path เต็ม
 except FileNotFoundError:
     st.warning("ไม่พบไฟล์รูปภาพประกอบ (feature_importance.png หรือ roc_curve.png)")
+    feature_importance_img = None
+    roc_curve_img = None
+except Exception as e: # เพิ่ม Exception ทั่วไป
+    st.warning(f"เกิดข้อผิดพลาดในการโหลดรูปภาพ: {e}")
     feature_importance_img = None
     roc_curve_img = None
 
