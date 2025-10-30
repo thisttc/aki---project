@@ -1,26 +1,29 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 from PIL import Image
-
-
-# --- 2. ตั้งค่าหน้าเว็บ (ย้ายมาไว้เป็นคำสั่งแรกสุด) ---
 st.set_page_config(page_title="AKI Prediction Tool", layout="wide")
 
-# --- 1. โหลด Assets ที่จำเป็น ---
 @st.cache_resource
 def load_model_and_features():
     """
     โหลดโมเดลและรายชื่อ features ที่จำเป็น
     """
     try:
-        model = joblib.load('aki_rf_model.joblib')
-        feature_names = joblib.load('feature_names.pkl') # นี่คือรายชื่อ 50 features ที่โมเดลคาดหวัง
+        script_dir = os.path.dirname(__file__)
+        model_path = os.path.join(script_dir, 'aki_rf_model.joblib')
+        features_path = os.path.join(script_dir, 'feature_names.pkl')
+
+        model = joblib.load(model_path) 
+        feature_names = joblib.load(features_path)
         return model, feature_names
     except FileNotFoundError:
-        st.error("ไม่พบไฟล์โมเดลที่จำเป็น (aki_rf_model.joblib หรือ feature_names.pkl) กรุณารัน Notebook เพื่อบันทึกไฟล์ก่อน")
+        st.error("ไม่พบไฟล์โมเดลที่จำเป็น (aki_rf_model.joblib หรือ feature_names.pkl) กรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์ src บน GitHub")
         st.stop()
-        
+    except Exception as e:
+        st.error(f"เกิดข้อผิดพลาดในการโหลดโมเดล: {e}")
+        st.stop()
 model, feature_names = load_model_and_features()
 
 # โหลดรูปภาพ
