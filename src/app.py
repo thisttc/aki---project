@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 from PIL import Image
-import io
+
 
 # --- 2. ตั้งค่าหน้าเว็บ (ย้ายมาไว้เป็นคำสั่งแรกสุด) ---
 st.set_page_config(page_title="AKI Prediction Tool", layout="wide")
